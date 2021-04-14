@@ -19,6 +19,20 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
+    <!--typeAliases标签是别名处理器
+        typeAlias标签为某个Java类型起别名
+            type属性: 指定要起别名的类型全类名，默认别名为类名小写
+            alias属性: 新类名
+        package标签为某个包下的所有类(包括子包下的类)批量起别名(类名小写)
+            name属性: 指定包名
+    -->
+    <typeAliases>
+        <!--别名为employee-->
+        <typeAlias type="com.jeremy.bean.Employee"/>
+        <!--批量起别名-->
+        <package name="com.jeremy"/>
+    </typeAliases>
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>

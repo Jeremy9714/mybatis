@@ -1,9 +1,13 @@
 package com.jeremy.bean;
 
+import org.apache.ibatis.type.Alias;
+
 /**
  * @author Chenyang
  * @create 2021-04-14-19:17
  */
+
+@Alias("emp") //批量起别名的情况下，可以通过Alias注解可以给类型起新的别名
 public class Employee {
 
     private int id;
