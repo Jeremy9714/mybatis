@@ -21,7 +21,7 @@ public class EmployeeTest {
     @Test
     public void test2() throws IOException {
         SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
-        try (SqlSession session = sqlSessionFactory.openSession();) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
             //获取接口的实现类对象(自动创建的代理对象)
             EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
             Employee employee = mapper.getEmployee(1);
