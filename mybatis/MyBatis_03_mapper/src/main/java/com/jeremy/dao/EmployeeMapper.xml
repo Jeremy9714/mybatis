@@ -27,9 +27,14 @@
     </select>
 
     <!--方式三: 直接传入map集合; 通过#{key}来取值-->
+    <!--
+        #{}: 以预编译的形式将参数设置在sql语句中；可以防止sql注入
+        ${}: 取出的值直接拼装到sql语句中；会出现sql注入
+        原生JDBC不支持占位符的地方(分表、排序等)可以使用${}进行取值
+    -->
     <select id="getEmpByMap" resultType="com.jeremy.bean.Employee">
         select *
-        from tb_employee
+        from ${tableName}
         where id = #{id} and last_name = #{lastName}
     </select>
 

@@ -42,6 +42,7 @@ public class EmployeeTest {
             Map<String, Object> map = new HashMap<>();
             map.put("id", 1);
             map.put("lastName", "tom");
+            map.put("tableName","tb_employee");
             Employee tom = mapper.getEmpByMap(map);
             System.out.println(tom);
         }
