@@ -2,6 +2,7 @@ package com.jeremy;
 
 import com.jeremy.bean.Employee;
 import com.jeremy.dao.EmployeeMapper;
+import com.jeremy.dao.EmployeeMapperAnnotation;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -28,6 +29,15 @@ public class EmployeeTest {
             sqlSessionFactory =  new SqlSessionFactoryBuilder().build(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test2() throws IOException {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            EmployeeMapperAnnotation mapper = session.getMapper(EmployeeMapperAnnotation.class);
+            Employee employee = mapper.getEmployee(1);
+            System.out.println(employee);
         }
     }
 

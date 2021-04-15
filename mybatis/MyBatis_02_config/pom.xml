@@ -39,4 +39,16 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <resources>
+      <!--maven同时处理该路径下指定的非java文件-->
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+  </build>
 </project>
