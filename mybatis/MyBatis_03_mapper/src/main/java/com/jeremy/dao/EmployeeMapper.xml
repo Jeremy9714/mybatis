@@ -15,11 +15,19 @@
         where id = #{id}
     </select>
 
-    <!--传入多个参数时的处理: 多个参数会被封装到一个map中，key值是参数索引(0...N)或者Param1...ParamN
-        1. 通过#{参数的索引}来取值
-        2. 命名参数，明确指定封装参数时，map的key值
+    <!--传入多个参数时的处理: 多个参数会被封装到一个map中，key值是参数索引(0...N)或者Param1...ParamN-->
+    <!--
+        方式一: 通过#{参数的索引}来取值
+        方式二: 命名参数，通过@Param注解明确指定封装参数时map的key值; 通过#{指定key值}来取值
     -->
     <select id="getEmpByIdAndLastName" resultType="com.jeremy.bean.Employee">
+        select *
+        from tb_employee
+        where id = #{id} and last_name = #{lastName}
+    </select>
+
+    <!--方式三: 直接传入map集合; 通过#{key}来取值-->
+    <select id="getEmpByMap" resultType="com.jeremy.bean.Employee">
         select *
         from tb_employee
         where id = #{id} and last_name = #{lastName}
@@ -39,7 +47,6 @@
         <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
             select XXX_SEQ.nextval from db_mybatis
         </selectKey>
-
         insert into tb_employee(EMPLOYEE_ID, LAST_NAME, GENDER, EMAIL)
         values(#{id},#{lastName},#{gender}, #{email})
     </insert>

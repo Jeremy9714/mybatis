@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Chenyang
@@ -32,6 +34,20 @@ public class EmployeeTest {
         }
     }
 
+    //参数处理: 传入多值的处理2
+    @Test
+    public void test3() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", 1);
+            map.put("lastName", "tom");
+            Employee tom = mapper.getEmpByMap(map);
+            System.out.println(tom);
+        }
+    }
+
+    //参数处理: 传入多值的处理1
     @Test
     public void test2() {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
@@ -41,6 +57,7 @@ public class EmployeeTest {
         }
     }
 
+    //增删改查、获取自增的主键值
     @Test
     public void test1() throws IOException {
         try (SqlSession session = sqlSessionFactory.openSession()) {
