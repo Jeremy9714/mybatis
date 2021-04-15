@@ -14,7 +14,7 @@ public interface EmployeeMapper {
     Employee getEmp(Integer id);
 
     //增
-    Long addEmp(Employee employee);
+    void addEmp(Employee employee);
 
     //删
     Boolean deleteEmp(Integer id);

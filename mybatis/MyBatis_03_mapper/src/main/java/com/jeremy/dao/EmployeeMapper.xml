@@ -12,7 +12,11 @@
         where id = #{id}
     </select>
 
-    <insert id="addEmp" parameterType="com.jeremy.bean.Employee">
+    <!--
+        useGeneratedKeys属性: 获取自增的主键值
+        keyProperty属性: 指定将获取的主键值封装到javaBean的哪个属性中
+    -->
+    <insert id="addEmp" parameterType="com.jeremy.bean.Employee" useGeneratedKeys="true" keyProperty="id">
         insert into tb_employee(last_name, gender, email)
         values (#{lastName}, #{gender}, #{email})
     </insert>

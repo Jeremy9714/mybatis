@@ -37,21 +37,26 @@ public class EmployeeTest {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
 
+            Employee emp = new Employee(null, "Jack", "1", "Jack@qq.com");
+
             //添加测试
-            Long res1 = mapper.addEmp(new Employee(null, "Jack", "1", "Jack@qq.com"));
-            System.out.println(res1);
+            mapper.addEmp(emp);
+
+            //获取自增的主键值
+            Integer id = emp.getId();
+            System.out.println("主键值为: " + id);
 
             //修改测试
-            Integer res2 = mapper.updateEmp(new Employee(3, "Casey", "0", "Casey@gmail.com"));
-            System.out.println(res2);
+            Integer res2 = mapper.updateEmp(new Employee(id, "Casey", "0", "Casey@gmail.com"));
+            System.out.println("受影响行数: " + res2);
 
             //查询测试
-            Employee emp = mapper.getEmp(3);
+            emp = mapper.getEmp(id);
             System.out.println(emp);
 
             //删除测试
             Boolean isDeleted = mapper.deleteEmp(3);
-            System.out.println(isDeleted);
+            System.out.println("是否成功删除: " + isDeleted);
 
             //openSession需要手动提交
             session.commit();
