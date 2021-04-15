@@ -42,7 +42,7 @@ public class EmployeeTest {
             Map<String, Object> map = new HashMap<>();
             map.put("id", 1);
             map.put("lastName", "tom");
-            map.put("tableName","tb_employee");
+            map.put("tableName", "tb_employee");
             Employee tom = mapper.getEmpByMap(map);
             System.out.println(tom);
         }
@@ -64,7 +64,7 @@ public class EmployeeTest {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
 
-            Employee emp = new Employee(null, "Jack", "1", "Jack@qq.com");
+            Employee emp = new Employee(null, "Jack", "1", null);
 
             //添加测试
             mapper.addEmp(emp);
@@ -82,7 +82,7 @@ public class EmployeeTest {
             System.out.println(emp);
 
             //删除测试
-            Boolean isDeleted = mapper.deleteEmp(3);
+            Boolean isDeleted = mapper.deleteEmp(id);
             System.out.println("是否成功删除: " + isDeleted);
 
             //openSession需要手动提交

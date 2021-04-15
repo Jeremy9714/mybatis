@@ -53,7 +53,7 @@
             select XXX_SEQ.nextval from db_mybatis
         </selectKey>
         insert into tb_employee(EMPLOYEE_ID, LAST_NAME, GENDER, EMAIL)
-        values(#{id},#{lastName},#{gender}, #{email})
+        values(#{id},#{lastName},#{gender}, #{email, jdbcType=NULL})
     </insert>
 
     <delete id="deleteEmp">

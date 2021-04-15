@@ -11,6 +11,9 @@
     <settings>
         <!--开启驼峰命名规则-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!--取值时，若参数值为null，mybatis会将其映射为数据库的NULL值-->
+        <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
 
     <!--typeAliases标签: 别名处理器-->
