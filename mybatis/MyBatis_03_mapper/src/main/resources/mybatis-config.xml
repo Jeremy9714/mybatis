@@ -48,6 +48,7 @@
     <databaseIdProvider type="DB_VENDOR">
         <!--为不同的数据库厂商起别名-->
         <property name="MySQL" value="mysql"/>
+        <property name="Oracle" value="oracle"/>
     </databaseIdProvider>
 
     <!--mappers标签: sql映射注册-->

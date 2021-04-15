@@ -33,6 +33,15 @@ public class EmployeeTest {
     }
 
     @Test
+    public void test2() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+            Employee tom = mapper.getEmpByIdAndLastName(1, "tom");
+            System.out.println(tom);
+        }
+    }
+
+    @Test
     public void test1() throws IOException {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
