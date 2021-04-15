@@ -21,12 +21,12 @@ public class EmployeeTest {
     private static SqlSessionFactory sqlSessionFactory;
 
     //抽取出获取SqlSessionFactory的步骤
-    static{
+    static {
         //全局配置文件的路径
         String resource = "mybatis-config.xml";
         try {
             InputStream inputStream = Resources.getResourceAsStream(resource);
-            sqlSessionFactory =  new SqlSessionFactoryBuilder().build(inputStream);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,10 +35,26 @@ public class EmployeeTest {
     @Test
     public void test1() throws IOException {
         try (SqlSession session = sqlSessionFactory.openSession()) {
-            //获取接口的实现类对象(自动创建的代理对象)
             EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-            Employee employee = mapper.getEmployee(1);
-            System.out.println(employee);
+
+            //添加测试
+            Long res1 = mapper.addEmp(new Employee(null, "Jack", "1", "Jack@qq.com"));
+            System.out.println(res1);
+
+            //修改测试
+            Integer res2 = mapper.updateEmp(new Employee(3, "Casey", "0", "Casey@gmail.com"));
+            System.out.println(res2);
+
+            //查询测试
+            Employee emp = mapper.getEmp(3);
+            System.out.println(emp);
+
+            //删除测试
+            Boolean isDeleted = mapper.deleteEmp(3);
+            System.out.println(isDeleted);
+
+            //openSession需要手动提交
+            session.commit();
         }
     }
 }

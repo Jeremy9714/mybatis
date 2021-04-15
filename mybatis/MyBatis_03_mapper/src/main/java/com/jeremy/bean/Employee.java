@@ -10,16 +10,26 @@ import org.apache.ibatis.type.Alias;
 @Alias("emp") //批量起别名的情况下，可以通过Alias注解可以给类型起新的别名
 public class Employee {
 
-    private int id;
+    private Integer id;
     private String lastName;
     private String gender;
     private String email;
 
-    public int getId() {
+    public Employee() {
+    }
+
+    public Employee(Integer id, String lastName, String gender, String email) {
+        this.id = id;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.email = email;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
