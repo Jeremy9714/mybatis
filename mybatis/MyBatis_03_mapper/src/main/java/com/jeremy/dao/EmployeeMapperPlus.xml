@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeremy.dao.EmployeeMapperPlus">
+
+    <!-- 通过resultMap标签自定义某个javaBean的封装规则-->
+    <resultMap id="MyEmp1" type="com.jeremy.bean.Employee">
+        <!-- id标签指定主键列的封装规则
+                column属性指定列名
+                property属性指定对应的javaBean属性
+            -->
+        <id column="id" property="id"/>
+        <!-- result标签定义普通列的封装规则-->
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <!--其他不指定的列会自动封装-->
+    </resultMap>
+
+    <!-- 联合查询: 级联属性封装结果集-->
+    <resultMap id="MyEmp2" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <result column="did" property="dept.id"/>
+        <result column="dept_name" property="dept.departmentName"/>
+    </resultMap>
+
+    <select id="getEmpById" resultMap="MyEmp1">
+        select *
+        from tb_employee
+        where id = #{id}
+    </select>
+
+    <select id="getEmpAndDept" resultMap="MyEmp2">
+        SELECT e.id id, last_name, gender, email, d_id, d.id did, d.dept_name
+        FROM tb_employee e JOIN tb_dept d
+        ON e.`d_id`=d.`id`
+        WHERE e.`id` = #{id};
+    </select>
+
+</mapper>
