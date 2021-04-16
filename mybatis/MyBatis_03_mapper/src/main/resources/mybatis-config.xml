@@ -14,6 +14,12 @@
 
         <!--取值时，若参数值为null，mybatis会将其映射为数据库的NULL值-->
         <setting name="jdbcTypeForNull" value="NULL"/>
+
+        <!--开启延时加载，关联的属性只有在使用时才会被加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+
+        <!--侵入延时加载，关闭后每一个属性只有在需要时才会被加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
     </settings>
 
     <!--typeAliases标签: 别名处理器-->
