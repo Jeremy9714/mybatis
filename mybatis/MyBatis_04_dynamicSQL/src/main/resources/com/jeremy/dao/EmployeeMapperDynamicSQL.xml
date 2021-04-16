@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace:名称空间-->
+<mapper namespace="com.jeremy.dao.EmployeeMapperDynamicSQL">
+
+    <!-- if标签从参数中取值进行判断
+            test: 判断表达式(OGNL)
+         特色树符号需要写转义字符
+    -->
+    <select id="getEmpListByIf" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <!--where-->
+
+        <!--mybatis会将where标签中拼装的sql语句多出来的and或者or去掉-->
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                last_name like #{lastName}
+            </if>
+            <if test="gender==0 or gender==1">
+                gender = #{gender}
+            </if>
+            <if test="email!=null and email.trim()!=&quot;&quot;">
+                email = #{email}
+            </if>
+        </where>
+    </select>
+
+</mapper>
