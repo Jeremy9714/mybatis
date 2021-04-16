@@ -18,7 +18,7 @@
         <!--其他不指定的列会自动封装-->
     </resultMap>
 
-    <!-- 联合查询: 级联属性封装结果集-->
+    <!-- 关联查询: 级联属性封装结果集-->
     <resultMap id="MyDifEmp1" type="com.jeremy.bean.Employee">
         <id column="id" property="id"/>
         <result column="last_name" property="lastName"/>

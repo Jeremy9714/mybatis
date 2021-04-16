@@ -1,6 +1,8 @@
 package com.jeremy;
 
+import com.jeremy.bean.Department;
 import com.jeremy.bean.Employee;
+import com.jeremy.dao.DepartmentMapper;
 import com.jeremy.dao.EmployeeMapperPlus;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -31,9 +33,20 @@ public class EmployeeTest2 {
         }
     }
 
+    //关联查询定义collection集合对象
+    @Test
+    public void resultMapTest2() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            DepartmentMapper mapper = session.getMapper(DepartmentMapper.class);
+            Department dept = mapper.getDeptByIdPlus(1);
+            System.out.println(dept);
+            dept.getEmps().forEach(System.out::println);
+        }
+    }
+
     //resultMap实现高级结果集映射
     @Test
-    public void test1() {
+    public void resultMapTest1() {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
             EmployeeMapperPlus mapper = session.getMapper(EmployeeMapperPlus.class);
 //            Employee emp = mapper.getEmpById(2);

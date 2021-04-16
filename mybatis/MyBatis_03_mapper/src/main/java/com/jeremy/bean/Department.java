@@ -2,6 +2,8 @@ package com.jeremy.bean;
 
 import org.apache.ibatis.type.Alias;
 
+import java.util.List;
+
 /**
  * @author Chenyang
  * @create 2021-04-16-16:09
@@ -11,6 +13,7 @@ public class Department {
 
     private Integer id;
     private String departmentName;
+    private List<Employee> emps;
 
     public Integer getId() {
         return id;
@@ -26,6 +29,14 @@ public class Department {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public List<Employee> getEmps() {
+        return emps;
+    }
+
+    public void setEmps(List<Employee> emps) {
+        this.emps = emps;
     }
 
     @Override
