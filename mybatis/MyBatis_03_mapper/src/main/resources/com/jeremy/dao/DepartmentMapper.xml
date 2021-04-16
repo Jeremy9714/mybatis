@@ -8,7 +8,7 @@
         collection嵌套结果集的方式，定义关联的集合类型元素的封装规则
     -->
 
-    <resultMap id="MyDifDept" type="com.jeremy.bean.Department">
+    <resultMap id="MyDept" type="com.jeremy.bean.Department">
         <id column="did" property="id"/>
         <result column="dept_name" property="departmentName"/>
 
@@ -25,17 +25,33 @@
         </collection>
     </resultMap>
 
+    <resultMap id="MyDeptStep" type="com.jeremy.bean.Department">
+        <id column="id" property="id"/>
+        <result column="dept_name" property="departmentName"/>
+
+        <!--若传递多列的值，可以将多列的值封装为map传递-->
+        <!--fetchType属性可以设置延迟查询还是急查询-->
+        <collection property="emps" select="com.jeremy.dao.EmployeeMapperPlus.getEmpListByDeptId"
+                    column="{deptId=id}" fetchType="eager">
+        </collection>
+    </resultMap>
+
     <select id="getDeptById" resultType="com.jeremy.bean.Department">
         select id, dept_name departmentName from tb_dept where id = #{id}
     </select>
 
     <!--关联查询集合-->
-    <select id="getDeptByIdPlus" resultMap="MyDifDept">
+    <select id="getDeptByIdPlus" resultMap="MyDept">
         SELECT d.`id` did, dept_name, e.id eid, last_name, gender, email
         FROM tb_dept d
         LEFT JOIN tb_employee e
         ON d.`id` = e.`d_id`
         WHERE d.`id` = 1;
+    </select>
+
+    <!--分步查询-->
+    <select id="getDeptByIdStep" resultMap="MyDeptStep">
+        select * from tb_dept where id = #{id}
     </select>
 
 </mapper>

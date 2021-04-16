@@ -80,4 +80,8 @@
         where id = #{id}
     </select>
 
+    <select id="getEmpListByDeptId" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee where d_id = #{deptId}
+    </select>
+
 </mapper>

@@ -11,4 +11,6 @@ public interface DepartmentMapper extends EmployeeMapperPlus {
     Department getDeptById(Integer id);
 
     Department getDeptByIdPlus(Integer id);
+
+    Department getDeptByIdStep(Integer deptId);
 }

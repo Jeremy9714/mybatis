@@ -38,7 +38,8 @@ public class EmployeeTest2 {
     public void resultMapTest2() {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
             DepartmentMapper mapper = session.getMapper(DepartmentMapper.class);
-            Department dept = mapper.getDeptByIdPlus(1);
+//            Department dept = mapper.getDeptByIdPlus(1);
+            Department dept = mapper.getDeptByIdStep(1);
             System.out.println(dept);
             dept.getEmps().forEach(System.out::println);
         }
