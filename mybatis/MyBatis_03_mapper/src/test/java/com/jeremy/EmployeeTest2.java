@@ -37,10 +37,10 @@ public class EmployeeTest2 {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
             EmployeeMapperPlus mapper = session.getMapper(EmployeeMapperPlus.class);
 //            Employee emp = mapper.getEmpById(2);
-//            System.out.println(emp);
-            Employee empAndDept = mapper.getEmpAndDept(2);
-            System.out.println(empAndDept);
-            System.out.println(empAndDept.getDepartment());
+//            Employee emp = mapper.getEmpAndDept(2);
+            Employee emp = mapper.getEmpByIdStep(2);
+            System.out.println(emp);
+            System.out.println(emp.getDepartment());
         }
     }
 

@@ -12,4 +12,7 @@ public interface EmployeeMapperPlus {
 
     //查询员工信息及所属部门信息
     Employee getEmpAndDept(Integer id);
+
+    //分步查询
+    Employee getEmpByIdStep(Integer id);
 }

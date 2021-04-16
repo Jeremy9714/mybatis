@@ -5,7 +5,7 @@
 <mapper namespace="com.jeremy.dao.EmployeeMapperPlus">
 
     <!-- 通过resultMap标签自定义某个javaBean的封装规则-->
-    <resultMap id="MyEmp1" type="com.jeremy.bean.Employee">
+    <resultMap id="MySimpleEmp" type="com.jeremy.bean.Employee">
         <!-- id标签指定主键列的封装规则
                 column属性指定列名
                 property属性指定对应的javaBean属性
@@ -19,7 +19,7 @@
     </resultMap>
 
     <!-- 联合查询: 级联属性封装结果集-->
-    <resultMap id="MyEmp2" type="com.jeremy.bean.Employee">
+    <resultMap id="MyDifEmp1" type="com.jeremy.bean.Employee">
         <id column="id" property="id"/>
         <result column="last_name" property="lastName"/>
         <result column="gender" property="gender"/>
@@ -28,17 +28,56 @@
         <result column="dept_name" property="dept.departmentName"/>
     </resultMap>
 
-    <select id="getEmpById" resultMap="MyEmp1">
+    <!-- 使用association定义单个对象的封装规则 -->
+    <resultMap id="MyDifEmp2" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+
+        <!-- association标签指定javaBean对象
+                property属性: 指定联合的对象是哪个属性
+                javaType属性: 指定该属性对象的类型
+        -->
+        <association property="dept" javaType="com.jeremy.bean.Department">
+            <id column="did" property="id"/>
+            <result column="dept_name" property="departmentName"/>
+        </association>
+    </resultMap>
+
+    <!-- 分布查询 -->
+    <resultMap id="MyDifEmp3" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+
+        <!-- association定义关联对象的封装规则
+                select属性: 表明当前属性对象时是用select指定的方法查出的结果
+                column属性: 表明将哪一列的值传入指定的方法
+        -->
+        <association property="dept" select="com.jeremy.dao.DepartmentMapper.getDeptById"
+                     column="d_id">
+        </association>
+    </resultMap>
+
+    <select id="getEmpById" resultMap="MySimpleEmp">
         select *
         from tb_employee
         where id = #{id}
     </select>
 
-    <select id="getEmpAndDept" resultMap="MyEmp2">
+    <select id="getEmpAndDept" resultMap="MyDifEmp2">
         SELECT e.id id, last_name, gender, email, d_id, d.id did, d.dept_name
         FROM tb_employee e JOIN tb_dept d
         ON e.`d_id`=d.`id`
         WHERE e.`id` = #{id};
+    </select>
+
+    <select id="getEmpByIdStep" resultMap="MyDifEmp3">
+        select *
+        from tb_employee
+        where id = #{id}
     </select>
 
 </mapper>
