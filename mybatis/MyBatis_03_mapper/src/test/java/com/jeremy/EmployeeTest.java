@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +32,23 @@ public class EmployeeTest {
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test4() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+//            List<Employee> list = mapper.getEmpListByLastName("tom");
+//            list.forEach(System.out::println);
+
+//            Map<String, Object> map = mapper.getEmpAsMapByLastName("tom");
+
+            Map<Integer, Employee> map = mapper.getEmpMapByLastName("tom");
+            map.forEach((k, v) -> {
+                System.out.print(k + "=");
+                System.out.println(v);
+            });
         }
     }
 

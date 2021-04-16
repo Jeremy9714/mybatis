@@ -23,7 +23,8 @@
     <select id="getEmpByIdAndLastName" resultType="com.jeremy.bean.Employee">
         select *
         from tb_employee
-        where id = #{id} and last_name = #{lastName}
+        where id = #{id}
+          and last_name = #{lastName}
     </select>
 
     <!--方式三: 直接传入map集合; 通过#{key}来取值-->
@@ -35,7 +36,27 @@
     <select id="getEmpByMap" resultType="com.jeremy.bean.Employee">
         select *
         from ${tableName}
-        where id = #{id} and last_name = #{lastName}
+        where id = #{id}
+          and last_name = #{lastName}
+    </select>
+
+    <!--若返回的是一个集合，则resultType为集合中元素的类型-->
+    <select id="getEmpListByLastName" resultType="com.jeremy.bean.Employee">
+        select *
+        from tb_employee
+        where last_name = #{lastName}
+    </select>
+
+    <select id="getEmpAsMapByLastName" resultType="map">
+        select *
+        from tb_employee
+        where last_name = #{lastName}
+    </select>
+
+    <select id="getEmpMapByLastName" resultType="com.jeremy.bean.Employee">
+        select *
+        from tb_employee
+        where last_name = #{lastName}
     </select>
 
     <!--
@@ -64,7 +85,9 @@
 
     <update id="updateEmp">
         update tb_employee
-        set last_name = #{lastName}, gender = #{gender}, email = #{email}
+        set last_name = #{lastName},
+            gender    = #{gender},
+            email     = #{email}
         where id = #{id}
     </update>
 
