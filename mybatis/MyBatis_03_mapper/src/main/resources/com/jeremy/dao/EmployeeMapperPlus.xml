@@ -61,6 +61,38 @@
         </association>
     </resultMap>
 
+    <!--mybatis通过discriminator鉴定器判断某列的值，并根据该值改变封装行为-->
+    <resultMap id="MyEmpDis" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <!--
+            column属性: 指定判定的列名
+            javaType属性: 列值对应的java类型
+        -->
+        <discriminator column="gender" javaType="string">
+            <!--
+                case标签列出了不同的情况
+                    value属性: 列值
+                    resultType属性: 指定封装的结果类型(不能省略);可以替换为resultMap
+            -->
+            <!-- gender为0，就查询部门信息-->
+            <case value="0" resultType="com.jeremy.bean.Employee">
+                <association property="dept" select="com.jeremy.dao.DepartmentMapper.getDeptById"
+                             column="d_id">
+                </association>
+            </case>
+            <!-- gender为1，就将last_name赋值给email-->
+            <case value="1" resultType="com.jeremy.bean.Employee">
+                <id column="id" property="id"/>
+                <result column="last_name" property="lastName"/>
+                <result column="gender" property="gender"/>
+                <result column="last_name" property="email"/>
+            </case>
+        </discriminator>
+    </resultMap>
+
     <select id="getEmpById" resultMap="MySimpleEmp">
         select *
         from tb_employee
@@ -74,14 +106,16 @@
         WHERE e.`id` = #{id};
     </select>
 
-    <select id="getEmpByIdStep" resultMap="MyDifEmp3">
+    <select id="getEmpByIdStep" resultMap="MyEmpDis">
         select *
         from tb_employee
         where id = #{id}
     </select>
 
     <select id="getEmpListByDeptId" resultType="com.jeremy.bean.Employee">
-        select * from tb_employee where d_id = #{deptId}
+        select *
+        from tb_employee
+        where d_id = #{deptId}
     </select>
 
 </mapper>
