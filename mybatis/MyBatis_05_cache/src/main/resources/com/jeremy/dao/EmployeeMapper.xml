@@ -13,7 +13,10 @@
         size属性: 缓存存放元素个数
         type属性: 自定义缓存的全类名; 该类需要实现Cache接口
     -->
-    <cache eviction="LRU" flushInterval="60000" readOnly="false" size="1024"></cache>
+<!--    <cache eviction="LRU" flushInterval="60000" readOnly="false" size="1024"></cache>-->
+
+    <!-- ehcache缓存-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
     <!--传入单个参数时的处理
         直接通过#{参数名}来取值
     -->

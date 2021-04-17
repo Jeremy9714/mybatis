@@ -4,10 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeremy.dao.DepartmentMapper">
 
+    <!-- 缓存引用
+            namespace属性: 指定和哪个命名空间下的缓存一样
+    -->
+    <cache-ref namespace="com.jeremy.dao.EmployeeMapper"/>
+
     <!--
         collection嵌套结果集的方式，定义关联的集合类型元素的封装规则
     -->
-
     <resultMap id="MyDept" type="com.jeremy.bean.Department">
         <id column="did" property="id"/>
         <result column="dept_name" property="departmentName"/>
