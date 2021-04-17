@@ -61,6 +61,7 @@ public class CacheTest {
 
             Employee emp1 = mapper1.getEmp(1);
             System.out.println(emp1);
+//            session1.clearCache();
             session1.close();
 
             //第二次查询，是从二级缓存中获取的数据，并未发送新的sql
