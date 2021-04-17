@@ -30,11 +30,27 @@ public class CacheTest {
     }
 
     @Test
-    public void test1() {
-        try (SqlSession session = sqlSessionFactory.openSession(true)) {
-            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-            Employee emp = mapper.getEmp(1);
-            System.out.println(emp);
+    public void testFirstLevelCache() {
+        SqlSession session1 = sqlSessionFactory.openSession();
+        SqlSession session2 = sqlSessionFactory.openSession();
+        try {
+            EmployeeMapper mapper1 = session1.getMapper(EmployeeMapper.class);
+            Employee emp1 = mapper1.getEmp(1);
+            System.out.println(emp1);
+
+            EmployeeMapper mapper2 = session2.getMapper(EmployeeMapper.class);
+            Employee emp2 = mapper2.getEmp(1);
+            System.out.println(emp2);
+
+            System.out.println(emp1==emp2);
+        }finally{
+            session1.close();
+            session2.close();
         }
+    }
+
+    @Test
+    public void testSecondLevelCache(){
+
     }
 }

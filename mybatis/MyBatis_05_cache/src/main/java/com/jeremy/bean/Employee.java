@@ -2,13 +2,16 @@ package com.jeremy.bean;
 
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
+
 /**
  * @author Chenyang
  * @create 2021-04-14-19:17
  */
 
 @Alias("emp") //批量起别名的情况下，可以通过Alias注解可以给类型起新的别名
-public class Employee {
+public class Employee implements Serializable {
+    private static final long serialVersionUID = 123L;
 
     private Integer id;
     private String lastName;

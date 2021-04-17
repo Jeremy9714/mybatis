@@ -5,7 +5,15 @@
 
 <!--namespace:名称空间-->
 <mapper namespace="com.jeremy.dao.EmployeeMapper">
-
+    <!--cache标签开启二级缓存
+        eviction属性: 缓存的回收策略(LRU、FIFO、WEAK、SOFT); 默认为LRU
+        flushInterval属性: 缓存的回收间隔(ms); 默认不回收
+        readOnly属性: 是否只读(默认不只读); 若只读，所有从缓存中获取数据的操作，mybatis会直接把数据的引用交出
+                                         不只读, 则mybatis会利用序列化&反序列化基数克隆一份数据交出
+        size属性: 缓存存放元素个数
+        type属性: 自定义缓存的全类名; 该类需要实现Cache接口
+    -->
+    <cache eviction="LRU" flushInterval="60000" readOnly="false" size="1024"></cache>
     <!--传入单个参数时的处理
         直接通过#{参数名}来取值
     -->

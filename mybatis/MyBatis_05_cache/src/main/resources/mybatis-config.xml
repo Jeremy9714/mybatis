@@ -20,6 +20,9 @@
 
         <!--侵入延迟加载，关闭后每一个属性只有在需要时才会被加载-->
         <setting name="aggressiveLazyLoading" value="false"/>
+
+        <!--开启全局二级缓存-->
+        <setting name="cacheEnabled" value="true"/>
     </settings>
 
     <!--typeAliases标签: 别名处理器-->

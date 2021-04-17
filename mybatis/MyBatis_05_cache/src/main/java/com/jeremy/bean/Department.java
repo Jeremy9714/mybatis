@@ -2,6 +2,7 @@ package com.jeremy.bean;
 
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,8 @@ import java.util.List;
  * @create 2021-04-16-16:09
  */
 @Alias("dept")
-public class Department {
+public class Department implements Serializable {
+    private static final long serialVersionUID = 123L;
 
     private Integer id;
     private String departmentName;
