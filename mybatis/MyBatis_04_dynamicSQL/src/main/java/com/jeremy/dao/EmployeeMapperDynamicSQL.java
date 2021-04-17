@@ -22,4 +22,10 @@ public interface EmployeeMapperDynamicSQL {
     //set封装修改条件
     int updateEmpBySet(Employee employee);
 
+    //foreach遍历集合
+    List<Employee> getEmpListByForeach(List<Integer> ids);
+
+    //批量插入
+    int addEmps(List<Employee> emps);
+
 }
