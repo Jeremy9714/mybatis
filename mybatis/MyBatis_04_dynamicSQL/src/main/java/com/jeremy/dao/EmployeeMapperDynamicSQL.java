@@ -28,4 +28,6 @@ public interface EmployeeMapperDynamicSQL {
     //批量插入
     int addEmps(List<Employee> emps);
 
+    //内置参数
+    List<Employee> getEmpListByInnerParams(Employee employee);
 }

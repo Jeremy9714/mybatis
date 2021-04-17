@@ -35,6 +35,17 @@ public class DynamicSQLTest {
     }
 
     @Test
+    public void innerParamsTest() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
+            Employee employee = new Employee();
+            employee.setLastName("t");
+            List<Employee> list = mapper.getEmpListByInnerParams(employee);
+            list.forEach(System.out::println);
+        }
+    }
+
+    @Test
     public void foreachTest2() {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
             EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);

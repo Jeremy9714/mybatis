@@ -114,19 +114,55 @@
     </select>
 
     <!-- foreach实现批量插入1-->
-<!--    <insert id="addEmps">-->
-<!--        INSERT INTO tb_employee(last_name, gender, email, d_id)-->
-<!--        VALUES-->
-<!--        <foreach collection="list" item="emp" separator=",">-->
-<!--        (#{emp.lastName}, #{emp.gender}, #{emp.email},#{emp.dept.id})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <insert id="addEmps">-->
+    <!--        INSERT INTO tb_employee(last_name, gender, email, d_id)-->
+    <!--        VALUES-->
+    <!--        <foreach collection="list" item="emp" separator=",">-->
+    <!--        (#{emp.lastName}, #{emp.gender}, #{emp.email},#{emp.dept.id})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
 
     <!-- 需要数据库连接属性allowMultiQueries开启-->
+    <!-- 通过include标签可以引用外部定义的sql
+         在include标签中可以通过property标签自定义新的属性
+    -->
     <insert id="addEmps">
         <foreach collection="list" item="emp" separator=";">
-            insert into tb_employee(last_name, gender, email, d_id)
+            insert into tb_employee(
+            <include refid="insertSql">
+                <property name="newParam" value="12"/>
+            </include>
+            )
             values(#{emp.lastName}, #{emp.gender}, #{emp.email},#{emp.dept.id})
         </foreach>
     </insert>
+
+    <!-- 两个内置参数
+            _parameter: 代表整个传入的参数，若传一个以上参数，则会被封装成一个map
+            _databaseId: 若在全局文件中配置过databaseIdProvider标签，改参数则代表当前数据库的别名
+         bind标签: 可以将OGNL表达式的值绑定到一个变量中，方便后来引用
+            name属性: 新变量
+            value属性: OGNL表达式
+    -->
+    <select id="getEmpListByInnerParams" resultType="com.jeremy.bean.Employee">
+        <bind name="_lastName" value="lastName + '%'"/>
+        <if test="_databaseId=='mysql'">
+            select * from tb_employee
+            <if test="_parameter!=null">
+                where last_name like #{_lastName}
+            </if>
+        </if>
+        <if test="_databaseId!='mysql'">
+            select * from tb_employee
+        </if>
+    </select>
+
+    <!-- sql标签用于抽取可重用的sql片段
+         在sql标签中也可以使用进行动态判断
+     -->
+    <sql id="insertSql">
+        <if test="_databaseId='mysql'">
+            last_name, gender, email, d_id
+        </if>
+    </sql>
 </mapper>
