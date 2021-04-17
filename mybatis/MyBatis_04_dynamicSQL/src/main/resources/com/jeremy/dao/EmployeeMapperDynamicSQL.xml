@@ -31,4 +31,68 @@
         </where>
     </select>
 
+    <!-- trim标签用于截取
+            prefix属性: 前缀，用于给trim标签体中整个字符串拼串后的结果，加一个前缀
+            prefixOverrides属性: 去掉整个字符串前面多余的字符
+            suffix属性: 后缀，用于给trim标签体中整个字符串拼串后的结果，加一个后缀
+            suffixOverrides属性: 去掉整个字符串后面多余的字符
+    -->
+    <select id="getEmpListByTrim" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <trim prefix="where" suffixOverrides="and">
+            <if test="id!=null">
+                id = #{id} and
+            </if>
+            <if test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                last_name like #{lastName} and
+            </if>
+            <if test="gender==0 or gender==1">
+                gender = #{gender} and
+            </if>
+            <if test="email!=null and email.trim()!=&quot;&quot;">
+                email = #{email} and
+            </if>
+        </trim>
+    </select>
+
+    <!-- choose标签
+            when标签: case
+            otherwise标签: default
+    -->
+    <select id="getEmpListByChoose" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <where>
+            <choose>
+                <when test="id!=null">
+                    id = #{id}
+                </when>
+                <when test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                    last_name like #{lastName}
+                </when>
+                <when test="email!=null and email.trim()!= &quot;&quot;">
+                    email = #{email}
+                </when>
+                <otherwise>
+                    gender = 0
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <update id="updateEmpBySet">
+        update tb_employee
+        <set>
+            <if test="lastName!=null">
+                last_name = #{lastName},
+            </if>
+            <if test="gender!=null">
+                gender = #{gender},
+            </if>
+            <if test="email!=null">
+                email = #{email}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

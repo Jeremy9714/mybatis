@@ -32,11 +32,34 @@ public class DynamicSQLTest {
     }
 
     @Test
+    public void chooseSet() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
+            Employee employee = new Employee();
+            employee.setId(4);
+            employee.setEmail("new@qq.com");
+            int res = mapper.updateEmpBySet(employee);
+            System.out.println(res);
+        }
+    }
+
+    @Test
+    public void chooseTest() {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
+            EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
+            Employee employee = new Employee();
+            List<Employee> list = mapper.getEmpListByChoose(employee);
+            list.forEach(System.out::println);
+        }
+    }
+
+    @Test
     public void trimTest() {
         try (SqlSession session = sqlSessionFactory.openSession(true)) {
             EmployeeMapperDynamicSQL mapper = session.getMapper(EmployeeMapperDynamicSQL.class);
             Employee employee = new Employee();
-
+            List<Employee> list = mapper.getEmpListByTrim(employee);
+            list.forEach(System.out::println);
         }
     }
 

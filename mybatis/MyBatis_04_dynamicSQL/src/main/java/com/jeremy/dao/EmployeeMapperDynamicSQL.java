@@ -10,10 +10,16 @@ import java.util.List;
  */
 public interface EmployeeMapperDynamicSQL {
 
-    //if判断测试
+    //if判断
     List<Employee> getEmpListByIf(Employee employee);
 
-    //trim截取测试
+    //trim截取
     List<Employee> getEmpListByTrim(Employee employee);
+
+    //choose分支选择
+    List<Employee> getEmpListByChoose(Employee employee);
+
+    //set封装修改条件
+    int updateEmpBySet(Employee employee);
 
 }
