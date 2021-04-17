@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace:名称空间-->
+<mapper namespace="com.jeremy.dao.EmployeeMapperDynamicSQL">
+
+    <!-- if标签从参数中取值进行判断
+            test: 判断表达式(OGNL)
+         特色树符号需要写转义字符
+    -->
+    <select id="getEmpListByIf" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <!--where-->
+
+        <!--mybatis会将where标签中拼装的sql语句多出来的and或者or去掉-->
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                last_name like #{lastName}
+            </if>
+            <if test="gender==0 or gender==1">
+                gender = #{gender}
+            </if>
+            <if test="email!=null and email.trim()!=&quot;&quot;">
+                email = #{email}
+            </if>
+        </where>
+    </select>
+
+    <!-- trim标签用于截取
+            prefix属性: 前缀，用于给trim标签体中整个字符串拼串后的结果，加一个前缀
+            prefixOverrides属性: 去掉整个字符串前面多余的字符
+            suffix属性: 后缀，用于给trim标签体中整个字符串拼串后的结果，加一个后缀
+            suffixOverrides属性: 去掉整个字符串后面多余的字符
+    -->
+    <select id="getEmpListByTrim" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <trim prefix="where" suffixOverrides="and">
+            <if test="id!=null">
+                id = #{id} and
+            </if>
+            <if test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                last_name like #{lastName} and
+            </if>
+            <if test="gender==0 or gender==1">
+                gender = #{gender} and
+            </if>
+            <if test="email!=null and email.trim()!=&quot;&quot;">
+                email = #{email} and
+            </if>
+        </trim>
+    </select>
+
+    <!-- choose标签
+            when标签: case
+            otherwise标签: default
+    -->
+    <select id="getEmpListByChoose" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        <where>
+            <choose>
+                <when test="id!=null">
+                    id = #{id}
+                </when>
+                <when test="lastName!=null &amp;&amp; lastName!=&quot;&quot;">
+                    last_name like #{lastName}
+                </when>
+                <when test="email!=null and email.trim()!= &quot;&quot;">
+                    email = #{email}
+                </when>
+                <otherwise>
+                    gender = 0
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--set标签用于动态包含需要更新的列，会在行首插入SET关键字，并删除多余的逗号-->
+    <update id="updateEmpBySet">
+        update tb_employee
+        <set>
+            <if test="lastName!=null">
+                last_name = #{lastName},
+            </if>
+            <if test="gender!=null">
+                gender = #{gender},
+            </if>
+            <if test="email!=null">
+                email = #{email}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!-- foreach遍历集合
+            collection属性: 指定要遍历的集合
+            item属性: 将当前遍历出的元素赋值给指定的变量
+            separator: 遍历出的元素之间的分隔符
+            open属性: 遍历出所有结果后在开始位置拼接的字符
+            close属性: 遍历出所有结果后在结束位置拼接的字符
+            index属性: 当遍历list集合时，该属性代表索引; 当遍历map时，代表key
+    -->
+    <select id="getEmpListByForeach" resultType="com.jeremy.bean.Employee">
+        select * from tb_employee
+        where id in
+        <foreach collection="list" item="item_id" separator="," open="(" close=")">
+            #{item_id}
+        </foreach>
+    </select>
+
+    <!-- foreach实现批量插入1-->
+    <!--    <insert id="addEmps">-->
+    <!--        INSERT INTO tb_employee(last_name, gender, email, d_id)-->
+    <!--        VALUES-->
+    <!--        <foreach collection="list" item="emp" separator=",">-->
+    <!--        (#{emp.lastName}, #{emp.gender}, #{emp.email},#{emp.dept.id})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
+
+    <!-- 需要数据库连接属性allowMultiQueries开启-->
+    <!-- 通过include标签可以引用外部定义的sql
+         在include标签中可以通过property标签自定义新的属性
+    -->
+    <insert id="addEmps">
+        <foreach collection="list" item="emp" separator=";">
+            insert into tb_employee(
+            <include refid="insertSql">
+                <property name="newParam" value="12"/>
+            </include>
+            )
+            values(#{emp.lastName}, #{emp.gender}, #{emp.email},#{emp.dept.id})
+        </foreach>
+    </insert>
+
+    <!-- 两个内置参数
+            _parameter: 代表整个传入的参数，若传一个以上参数，则会被封装成一个map
+            _databaseId: 若在全局文件中配置过databaseIdProvider标签，改参数则代表当前数据库的别名
+         bind标签: 可以将OGNL表达式的值绑定到一个变量中，方便后来引用
+            name属性: 新变量
+            value属性: OGNL表达式
+    -->
+    <select id="getEmpListByInnerParams" resultType="com.jeremy.bean.Employee">
+        <bind name="_lastName" value="lastName + '%'"/>
+        <if test="_databaseId=='mysql'">
+            select * from tb_employee
+            <if test="_parameter!=null">
+                where last_name like #{_lastName}
+            </if>
+        </if>
+        <if test="_databaseId!='mysql'">
+            select * from tb_employee
+        </if>
+    </select>
+
+    <!-- sql标签用于抽取可重用的sql片段
+         在sql标签中也可以使用进行动态判断
+     -->
+    <sql id="insertSql">
+        <if test="_databaseId='mysql'">
+            last_name, gender, email, d_id
+        </if>
+    </sql>
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeremy.dao.EmployeeMapperPlus">
+
+    <!-- 通过resultMap标签自定义某个javaBean的封装规则-->
+    <resultMap id="MySimpleEmp" type="com.jeremy.bean.Employee">
+        <!-- id标签指定主键列的封装规则
+                column属性指定列名
+                property属性指定对应的javaBean属性
+            -->
+        <id column="id" property="id"/>
+        <!-- result标签定义普通列的封装规则-->
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <!--其他不指定的列会自动封装-->
+    </resultMap>
+
+    <!-- 关联查询: 级联属性封装结果集-->
+    <resultMap id="MyDifEmp1" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <result column="did" property="dept.id"/>
+        <result column="dept_name" property="dept.departmentName"/>
+    </resultMap>
+
+    <!-- 使用association定义单个对象的封装规则 -->
+    <resultMap id="MyDifEmp2" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+
+        <!-- association标签指定javaBean对象
+                property属性: 指定联合的对象是哪个属性
+                javaType属性: 指定该属性对象的类型
+        -->
+        <association property="dept" javaType="com.jeremy.bean.Department">
+            <id column="did" property="id"/>
+            <result column="dept_name" property="departmentName"/>
+        </association>
+    </resultMap>
+
+    <!-- 分布查询 -->
+    <resultMap id="MyDifEmp3" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+
+        <!-- association定义关联对象的封装规则
+                select属性: 表明当前属性对象时是用select指定的方法查出的结果
+                column属性: 表明将哪一列的值传入指定的方法
+        -->
+        <association property="dept" select="com.jeremy.dao.DepartmentMapper.getDeptById"
+                     column="d_id">
+        </association>
+    </resultMap>
+
+    <!--mybatis通过discriminator鉴定器判断某列的值，并根据该值改变封装行为-->
+    <resultMap id="MyEmpDis" type="com.jeremy.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <!--
+            column属性: 指定判定的列名
+            javaType属性: 列值对应的java类型
+        -->
+        <discriminator column="gender" javaType="string">
+            <!--
+                case标签列出了不同的情况
+                    value属性: 列值
+                    resultType属性: 指定封装的结果类型(不能省略);可以替换为resultMap
+            -->
+            <!-- gender为0，就查询部门信息-->
+            <case value="0" resultType="com.jeremy.bean.Employee">
+                <association property="dept" select="com.jeremy.dao.DepartmentMapper.getDeptById"
+                             column="d_id">
+                </association>
+            </case>
+            <!-- gender为1，就将last_name赋值给email-->
+            <case value="1" resultType="com.jeremy.bean.Employee">
+                <id column="id" property="id"/>
+                <result column="last_name" property="lastName"/>
+                <result column="gender" property="gender"/>
+                <result column="last_name" property="email"/>
+            </case>
+        </discriminator>
+    </resultMap>
+
+    <select id="getEmpById" resultMap="MySimpleEmp">
+        select *
+        from tb_employee
+        where id = #{id}
+    </select>
+
+    <select id="getEmpAndDept" resultMap="MyDifEmp2">
+        SELECT e.id id, last_name, gender, email, d_id, d.id did, d.dept_name
+        FROM tb_employee e JOIN tb_dept d
+        ON e.`d_id`=d.`id`
+        WHERE e.`id` = #{id};
+    </select>
+
+    <select id="getEmpByIdStep" resultMap="MyEmpDis">
+        select *
+        from tb_employee
+        where id = #{id}
+    </select>
+
+    <select id="getEmpListByDeptId" resultType="com.jeremy.bean.Employee">
+        select *
+        from tb_employee
+        where d_id = #{deptId}
+    </select>
+
+</mapper>
