@@ -12,4 +12,9 @@
         where id = #{id}
     </select>
 
+    <select id="getEmps" resultType="com.jeremy.bean.Employee">
+        select *
+        from tb_employee
+    </select>
+
 </mapper>

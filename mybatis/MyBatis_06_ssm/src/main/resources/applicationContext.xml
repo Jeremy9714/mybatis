@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
     <!--Spring管理除了控制其外的所有业务逻辑组件-->
     <context:component-scan base-package="com.jeremy" use-default-filters="false">
@@ -20,6 +25,25 @@
         <property name="password" value="${jdbc.password}"></property>
     </bean>
 
+    <!--Spring事务管理-->
+    <bean id="dataSourceManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--开启事务注解-->
+    <tx:annotation-driven transaction-manager="dataSourceManager"></tx:annotation-driven>
+
     <!--整合mybatis-->
+    <!--创建SqlSessionFactory对象-->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--指定配置文件的位置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--指定mapper文件的位置-->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+    </bean>
+
+    <!--扫描所有mapper接口的实现，实现自动注入-->
+    <mybatis-spring:scan base-package="com.jeremy.dao"/>
 
 </beans>

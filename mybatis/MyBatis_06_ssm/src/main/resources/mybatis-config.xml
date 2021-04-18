@@ -4,9 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <!--properties标签: 引入外部properties配置文件的内容-->
-    <properties resource="db.properties"></properties>
-
     <!--settings标签: 包含多个重要的设置项-->
     <settings>
         <!--开启驼峰命名规则-->
@@ -25,48 +22,11 @@
         <setting name="cacheEnabled" value="true"/>
     </settings>
 
-    <!--typeAliases标签: 别名处理器-->
-    <typeAliases>
-        <!--别名为employee-->
-        <typeAlias type="com.jeremy.bean.Employee"/>
-        <!--批量起别名-->
-        <package name="com.jeremy"/>
-    </typeAliases>
-
-    <!--environments标签: 配置多个运行时环境-->
-    <environments default="development">
-        <!--environment标签用于配置一个具体的环境信息;必须含有两个子标签-->
-        <environment id="test">
-            <!--transaction标签是事务管理器-->
-            <transactionManager type="MANAGED"></transactionManager>
-            <!--dataSource标签是数据源-->
-            <dataSource type="UNPOOLED"></dataSource>
-        </environment>
-
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-
-            <!--数据库连接的配置-->
-            <dataSource type="POOLED">
-                <property name="driver" value="${jdbc.driver}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.username}"/>
-                <property name="password" value="${jdbc.password}"/>
-            </dataSource>
-        </environment>
-    </environments>
-
     <!--databaseIdProvider标签: 多数据库支持-->
     <databaseIdProvider type="DB_VENDOR">
         <!--为不同的数据库厂商起别名-->
         <property name="MySQL" value="mysql"/>
         <property name="Oracle" value="oracle"/>
     </databaseIdProvider>
-
-    <!--mappers标签: sql映射注册-->
-    <mappers>
-        <!--批量注册-->
-        <package name="com.jeremy.dao"/>
-    </mappers>
 
 </configuration>
