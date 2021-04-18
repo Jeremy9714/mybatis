@@ -1,6 +1,7 @@
 package com.jeremy;
 
 import com.jeremy.bean.Employee;
+import com.jeremy.bean.EmployeeExample;
 import com.jeremy.dao.EmployeeMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -61,7 +62,35 @@ public class CacheTest {
     @Test
     public void testMyBatis3() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
+            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
+            /**
+             * select * from tb_employee
+             * where
+             * (last_name like 't%' and gender = '0')
+             * or
+             * email like '%gmail%'
+             */
 
+            //xxxEmample类用于封装查询条件
+            EmployeeExample employeeExample = new EmployeeExample();
+
+            //xxxExample类的内部类Criteria就是拼装查询条件
+            EmployeeExample.Criteria criteria = employeeExample.createCriteria();
+
+            //Criteria类拥有javaBean类中各种属性的各种拼接条件
+            criteria.andLastNameLike("t%");
+            //将多个条件拼装
+            criteria.andGenderEqualTo("0");
+
+            //实现or条件，需要新建一个Criteria对象设定or的条件
+            EmployeeExample.Criteria criteria1 = employeeExample.createCriteria();
+            criteria1.andEmailLike("%gmail%");
+
+            //通过or(Criteria)方法加入or条件
+            employeeExample.or(criteria1);
+
+            List<Employee> employees = mapper.selectByExample(employeeExample);
+            employees.forEach(System.out::println);
         }
     }
 
