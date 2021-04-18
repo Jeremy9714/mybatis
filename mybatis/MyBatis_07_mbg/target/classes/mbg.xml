@@ -2,7 +2,11 @@
         "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <context id="simple" targetRuntime="MyBatis3Simple">
+
+    <!-- targetRuntime: 生成风格
+            MyBatis3Simple: 简单的CRUD
+            MyBatis3: 复杂的版本-->
+    <context id="simple" targetRuntime="MyBatis3">
 
         <!-- jdbcConnection: 设定如何连接目标数据库-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
