@@ -14,10 +14,11 @@
 
     <!--注册插件-->
     <plugins>
-        <plugin interceptor="com.jeremy.dao.MyPlugin">
+        <plugin interceptor="com.jeremy.dao.MyFirstPlugin">
             <property name="username" value="jeremy"/>
             <property name="password" value="pwd"/>
         </plugin>
+        <plugin interceptor="com.jeremy.dao.MySecondPlugin"></plugin>
     </plugins>
 
     <environments default="development">

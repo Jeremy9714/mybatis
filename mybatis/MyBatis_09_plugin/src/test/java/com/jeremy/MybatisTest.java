@@ -36,7 +36,7 @@ public class MybatisTest {
     @Test
     public void testPlugin() {
         //编写接口Interceptor的实现类
-
+        //多个插件存在时，会产生多层代理
     }
 
     @Test
